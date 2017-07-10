@@ -1,0 +1,15 @@
+<ActionBar title="JS Conference App {{getApplicationVersion()}}"></ActionBar>
+
+<StackLayout class="form">
+    <Label class="font-weight-bold text-center" text="Welcome to JS Conference running on {{appPlatform}}!"></Label>
+    <StackLayout class="input-field">
+        <Label class="label" text="Username"></Label>
+        <TextField class="input input-border" hint="Username" [(ngModel)]="username">
+        </TextField>
+        <Label class="label" text="Password"></Label>
+        <TextField class="input input-border" hint="Password" [(ngModel)]="password">
+        </TextField>
+    </StackLayout>
+    <Button text="Sign In" class="pulse btn btn-primary" (tap)="signIn()">
+    </Button>
+</StackLayout>
