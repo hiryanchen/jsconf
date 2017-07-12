@@ -25,13 +25,17 @@ export class SignInComponent {
     this.appPlatform = (app.android ? "Android" : (app.ios ? "IOS" : "mobile"));
   }
 
-  signIn() {
+  hashPassword(password:string):string {
     let shaObj:any = new jsSHA("SHA-1", "TEXT");
-    shaObj.update(this.password);
+    shaObj.update(password);
+    return shaObj.getHash("HEX");
+  }
+
+  signIn() {
     let navigationExtras: NavigationExtras = {
       queryParams: {
         "username": this.username,
-        "password": shaObj.getHash("HEX")
+        "password": this.hashPassword(this.password)
       }
     }
     this.router.navigate(["items"], navigationExtras);

@@ -19,7 +19,7 @@ export class AddItemComponent implements OnInit {
   title: string;
   description: string;
   image: ImageAsset;
-  private storage: Array<any> = [];
+  private items: Array<any> = [];
 
   constructor(
     private router: Router,
@@ -30,31 +30,39 @@ export class AddItemComponent implements OnInit {
   ngOnInit(): void {
     // Default to []
     const items:any = ApplicationSettings.getString("items", "[]");
-    this.storage = JSON.parse(items);
+    this.items = JSON.parse(items);
   }
 
   save(): void {
-    // Not working
-    // ApplicationSettings.clear();
+    const newItem:Item = {
+      "id": Math.floor(Math.random() * 10000),
+      "title" : this.title,
+      "description" : this.description
+    };
+
+    // Not working: ApplicationSettings.clear();
     ApplicationSettings.remove("items");
-    this.storage.push({
-      "id": 1,
-      "title": this.title,
-      "description": this.description
-    })
-    ApplicationSettings.setString("items", JSON.stringify(this.storage));
+    this.items.push(newItem);
+    ApplicationSettings.setString("items", JSON.stringify(this.items));
+
+    // Save into database instead:
+    this.itemService.getStorage().createDocument(newItem);
+
+    // Navigate back to the previous view.
     this.location.back();
   }
 
   public capture() {
-    camera.requestPermissions();
+    // if (!camera.isAvailable()) {
+      camera.requestPermissions();
+    //}
     camera.takePicture().then((imageAsset) => {
-        console.log("Result is an image asset instance");
-        let image:Image = new Image();
-        image.src = imageAsset;
-        this.image = imageAsset;
+      console.log("Result is an image asset instance");
+      let image:Image = new Image();
+      image.src = imageAsset;
+      this.image = imageAsset;
     }).catch((err) => {
-        console.log("Error -> " + err.message);
+      console.log("Error -> " + err.message);
     });
   }
 }

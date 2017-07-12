@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
+import { Http, Headers, RequestOptions } from "@angular/http";
+import "rxjs/Rx"
 
 import { Item } from "./item";
 import { ItemService } from "./item.service";
@@ -11,7 +13,6 @@ import { ItemService } from "./item.service";
 })
 export class ItemsComponent implements OnInit {
     username: string;
-    items: Item[];
 
     // This pattern makes use of Angular’s dependency injection implementation
     // to inject an instance of the ItemService service into this class. 
@@ -20,16 +21,38 @@ export class ItemsComponent implements OnInit {
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private itemService: ItemService) { }
+        private itemService: ItemService,
+        private http: Http) { }
 
     ngOnInit(): void {
         this.activatedRoute.queryParams.subscribe(params => {
             this.username = params["username"];
         })
-        this.items = this.itemService.getItems();
+        this.makeRemoteRequest();
+    }
+
+    get items():Item[] {
+        return this.itemService.getItems();
     }
 
     addVideo(): void {
-        this.router.navigate(["add-item"])
+      this.router.navigate(["add-item"])
+    }
+
+    public makeRemoteRequest() {
+      let headers = new Headers({"Content-Type" : "application/json"});
+      let options = new RequestOptions({ headers: headers });
+      this.http.post("http://httpbin.org/post", JSON.stringify(
+          {
+              id: 888,
+              title: "Chromecast",
+              description: "Home Entertainment"
+          })).map(result => result.json())
+          .do(result => console.log(JSON.stringify(result)))
+          .subscribe(result => {
+              this.itemService.addItem(result.json);
+          }, error => {
+              console.log(error);
+          })
     }
 }

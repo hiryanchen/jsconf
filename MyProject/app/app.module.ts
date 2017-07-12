@@ -2,6 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 // Need NativeScriptFormsModule to recognize ngModel
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
+import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
 
@@ -24,6 +25,7 @@ import { AddItemComponent } from "./item/add-item.component";
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
+        NativeScriptHttpModule,
         AppRoutingModule
     ],
     declarations: [
