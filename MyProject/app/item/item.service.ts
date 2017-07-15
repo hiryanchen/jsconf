@@ -18,6 +18,7 @@ export class ItemService {
         // digits, and the special characters _$()+-/. It must also be less than
         // 240 bytes and start with a lower case letter
         this.database = new Couchbase("videos");
+        // this.database.destroyDatabase();
         this.database.createView("items", "1", (document, emitter) => {
           emitter.emit(document._id, document);
         })
@@ -27,9 +28,18 @@ export class ItemService {
 
     private initializeDefaultItems():void {
       this.items = new Array<Item>(
-        { id: 1, title: "TypeScript", description: "TypeScript is awesome!" },
-        { id: 2, title: "Angular", description: "Angular 框架" },
-        { id: 3, title: "Ionic", description: "Hybrid mobile application"}
+        { id: 1,
+          title: "TypeScript",
+          description: "TypeScript is a typed superset of JavaScript that compiles into plain JavaScript!",
+          image: undefined },
+        { id: 2,
+          title: "Angular",
+          description: "一套框架，多种平台同时适用手机与桌面",
+          image: undefined },
+        { id: 3,
+          title: "Ionic",
+          description: "Hybrid mobile application",
+          image: undefined }
       );
     }
 
@@ -39,15 +49,6 @@ export class ItemService {
 
     getItems(): Item[] {
         this.initializeDefaultItems();
-
-        // Uses applicaition settings to get the items.
-        const items:string = ApplicationSettings.getString("items");
-        if (items) {
-            for (const item of JSON.parse(items)) {
-              console.log("Title: " + item["title"] + " Description: " +
-                  item["description"]);
-            }
-        }
 
         // instead use data base to get the items
         let rows = this.database.executeQuery('items');

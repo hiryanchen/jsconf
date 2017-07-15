@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import * as ApplicationSettings from "application-settings";
 import { Location } from "@angular/common";
+import { ImageSource, fromAsset } from "image-source";
 import * as camera from "nativescript-camera";
 
 import { Image } from "ui/image";
@@ -9,6 +10,10 @@ import { ImageAsset } from 'tns-core-modules/image-asset';
 
 import { Item } from "./item";
 import { ItemService } from "./item.service";
+
+import * as app from "tns-core-modules/application";
+import * as Platform from "platform";
+declare var android: any;
 
 @Component({
     selector: "ns-add-items",
@@ -19,6 +24,7 @@ export class AddItemComponent implements OnInit {
   title: string;
   description: string;
   image: ImageAsset;
+  imageString: string;
   private items: Array<any> = [];
 
   constructor(
@@ -37,10 +43,10 @@ export class AddItemComponent implements OnInit {
     const newItem:Item = {
       "id": Math.floor(Math.random() * 10000),
       "title" : this.title,
-      "description" : this.description
+      "description" : this.description,
+      "image" : this.imageString
     };
 
-    // Not working: ApplicationSettings.clear();
     ApplicationSettings.remove("items");
     this.items.push(newItem);
     ApplicationSettings.setString("items", JSON.stringify(this.items));
@@ -53,16 +59,17 @@ export class AddItemComponent implements OnInit {
   }
 
   public capture() {
-    // if (!camera.isAvailable()) {
-      camera.requestPermissions();
-    //}
-    camera.takePicture().then((imageAsset) => {
-      console.log("Result is an image asset instance");
-      let image:Image = new Image();
-      image.src = imageAsset;
+    camera.requestPermissions();
+    const cameraOpts:camera.CameraOptions = {};
+    cameraOpts.height = 180;
+    cameraOpts.width = 180;
+    cameraOpts.keepAspectRatio = true;
+    cameraOpts.saveToGallery = false;
+    camera.takePicture(cameraOpts).then((imageAsset:ImageAsset) => {
       this.image = imageAsset;
-    }).catch((err) => {
-      console.log("Error -> " + err.message);
+      fromAsset(this.image).then((imageSource:ImageSource) => {
+        this.imageString = imageSource.toBase64String("jpeg");
+      });
     });
   }
 }

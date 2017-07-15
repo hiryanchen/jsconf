@@ -27,6 +27,7 @@
 		"nativescript-couchbase": "^1.0.18",
 		"nativescript-theme-core": "~1.0.2",
 		"nativescript-unit-test-runner": "^0.3.4",
+		"nativescript-videoplayer": "^3.0.9",
 		"reflect-metadata": "~0.1.8",
 		"rxjs": "~5.3.0",
 		"tns-core-modules": "~3.1.0",

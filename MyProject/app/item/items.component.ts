@@ -35,7 +35,7 @@ export class ItemsComponent implements OnInit {
         return this.itemService.getItems();
     }
 
-    addVideo(): void {
+    addMedia(): void {
       this.router.navigate(["add-item"])
     }
 

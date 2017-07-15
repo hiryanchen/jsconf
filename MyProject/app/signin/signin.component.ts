@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import {Router, NavigationExtras} from "@angular/router";
+import { Router, NavigationExtras } from "@angular/router";
 
 import * as app from "tns-core-modules/application";
 import * as Platform from "platform";
@@ -20,6 +20,7 @@ export class SignInComponent {
   appPlatform:string = "mobile";
   username:string;
   password:string;
+  forgot:boolean = false;
 
   constructor(private router:Router) {
     this.appPlatform = (app.android ? "Android" : (app.ios ? "IOS" : "mobile"));
@@ -32,13 +33,18 @@ export class SignInComponent {
   }
 
   signIn() {
+    const hash:string = this.hashPassword(this.password);
     let navigationExtras: NavigationExtras = {
       queryParams: {
         "username": this.username,
-        "password": this.hashPassword(this.password)
+        "password": hash
       }
     }
-    this.router.navigate(["items"], navigationExtras);
+    if (hash == "93f8bb0eb2c659b85694486c41717eaf0fe23cd4") {
+      this.router.navigate(["items"], navigationExtras);
+    } else {
+      this.forgot = true;
+    }
   }
 
   getApplicationVersion() {

@@ -11,6 +11,11 @@ refer to http://docs.nativescript.org/ui/theme.
 */
 @import 'nativescript-theme-core/css/core.light.css';
 
+Page {
+  font-size: 15;
+}
+
+/*
 button {
     background-color: yellow;
 }
@@ -20,14 +25,28 @@ button {
     color: blue;
 }
 
+ActionBar {
+  background-color: black;
+  color: white;
+}
+
+*/
+
 .pulse {
     animation-name: pulse;
     animation-duration: 1s;
-    animation-delay: 1s;
+    animation-delay: 0.5s;
 }
 
 @keyframes pulse {
     0% { }
     50% { transform: scale(1.5, 1.5) }
     100% { transform: scale(1, 1) }
+}
+
+.list-page {
+  background-image: url("res://bg_inner");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }

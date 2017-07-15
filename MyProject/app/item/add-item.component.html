@@ -1,4 +1,4 @@
-<ActionBar title="Add a Video">
+<ActionBar title="Add a photo">
   <ActionItem text="Capture" ios.position="right" (tap)="capture()"></ActionItem>
 </ActionBar>
 
@@ -10,7 +10,11 @@
         <Label class="label" text="Description"></Label>
         <TextField class="input input-border" [(ngModel)]="description">
         </TextField>
-        <Image [src]="image"></Image>
+        <Image *ngIf="image != undefined"
+               width="300"
+               height="300"
+               stretch="aspectFit"
+               [src]="image"></Image>
     </StackLayout>
     <Button text="Save" class="btn btn-primary" (tap)="save()">
     </Button>
